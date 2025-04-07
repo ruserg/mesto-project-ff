@@ -1,12 +1,11 @@
 import "./index.css";
 import { initialCards } from "../components/initial_cards.js";
 import { createCard, toggleLike, deleteCard } from "../components/card.js";
-import { openModal, closeModal } from "../components/modal.js";
-
-// Анимация попапов
-document.querySelectorAll(".popup").forEach((popup) => {
-  popup.classList.add("popup_is-animated");
-});
+import {
+  openModal,
+  closeModal,
+  handlePopupClick,
+} from "../components/modal.js";
 
 // DOM-элементы
 const container = document.querySelector(".content");
@@ -22,14 +21,20 @@ const addButton = document.querySelector(".profile__add-button");
 const popupImageTag = document.querySelector(".popup__image");
 const popupCaption = document.querySelector(".popup__caption");
 
-const formElement = document.querySelector('.popup__form[name="edit-profile"]');
-const nameInput = formElement.querySelector(".popup__input_type_name");
-const jobInput = formElement.querySelector(".popup__input_type_description");
+const editProfileForm = document.querySelector(
+  '.popup__form[name="edit-profile"]'
+);
+const nameInput = editProfileForm.querySelector(".popup__input_type_name");
+const jobInput = editProfileForm.querySelector(
+  ".popup__input_type_description"
+);
 const profileName = document.querySelector(".profile__title");
 const profileJob = document.querySelector(".profile__description");
 
 const newCardForm = document.querySelector('.popup__form[name="new-place"]');
-const placeNameInput = newCardForm.querySelector(".popup__input_type_card-name");
+const placeNameInput = newCardForm.querySelector(
+  ".popup__input_type_card-name"
+);
 const placeLinkInput = newCardForm.querySelector(".popup__input_type_url");
 
 // Модальное изображение
@@ -60,7 +65,12 @@ function handleNewCardSubmit(evt) {
   const name = placeNameInput.value;
   const link = placeLinkInput.value;
 
-  const newCard = createCard({ name, link }, deleteCard, toggleLike, openImagePopup);
+  const newCard = createCard(
+    { name, link },
+    deleteCard,
+    toggleLike,
+    openImagePopup
+  );
   cardsContainer.prepend(newCard);
 
   closeModal(popupNewCard);
@@ -73,6 +83,12 @@ initialCards.forEach((element) => {
   cardsContainer.append(card);
 });
 
+// Анимация попапов, обработчики "закрыть"
+document.querySelectorAll(".popup").forEach((popup) => {
+  popup.classList.add("popup_is-animated");
+  popup.addEventListener("click", handlePopupClick);
+});
+
 // Обработчики кнопок
 editButton.addEventListener("click", () => {
   fillEditProfileForm();
@@ -83,5 +99,5 @@ addButton.addEventListener("click", () => {
   openModal(popupNewCard);
 });
 
-formElement.addEventListener("submit", handleProfileEditSubmit);
+editProfileForm.addEventListener("submit", handleProfileEditSubmit);
 newCardForm.addEventListener("submit", handleNewCardSubmit);
