@@ -2,13 +2,10 @@ import { apiDeleteCard, apiAddLike, apiRemoveLike } from "./api.js";
 
 // --- Создание карточки ---
 
-export function createCard(
+export const createCard = (
   element,
-  deleteCallback,
-  likeCallback,
-  imageClickCallback,
-  userId
-) {
+  { deleteCallback, likeCallback, imageClickCallback, userId } = {}
+) => {
   const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate
     .querySelector(".places__item")
@@ -51,11 +48,11 @@ export function createCard(
   );
 
   return cardElement;
-}
+};
 
 // --- Управление лайками ---
 
-export function toggleLike(cardId, likeButton, likeAmount) {
+export const toggleLike = (cardId, likeButton, likeAmount) => {
   const isLiked = likeButton.classList.contains("card__like-button_is-active");
 
   if (isLiked) {
@@ -79,11 +76,11 @@ export function toggleLike(cardId, likeButton, likeAmount) {
         console.log("Ошибка при добавлении лайка:", err);
       });
   }
-}
+};
 
 // --- Удаление карточки ---
 
-export function deleteCard(cardId, cardElement) {
+export const deleteCard = (cardId, cardElement) => {
   apiDeleteCard(cardId)
     .then(() => {
       cardElement.remove();
@@ -91,4 +88,4 @@ export function deleteCard(cardId, cardElement) {
     .catch((err) => {
       console.log("Ошибка при удалении карточки:", err);
     });
-}
+};
